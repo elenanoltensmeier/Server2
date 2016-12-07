@@ -50,7 +50,7 @@ public class StudentController extends UserController {
         }
         return isAdded;
     }
-    //metode til å softDelete et review
+    //metode til at softDelete et review
     public boolean softDeleteReview(int userId, int reviewId) {
         boolean isSoftDeleted = true;
 

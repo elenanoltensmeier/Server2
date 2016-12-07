@@ -34,7 +34,6 @@ public class UserEndpoint {
     }
 
     @GET
-    @Consumes("applications/json")
     @Path("/lecture/{code}")
     public Response getLectures(@PathParam("code") String code) {
         Gson gson = new Gson();
@@ -55,7 +54,6 @@ public class UserEndpoint {
      * @param userId Id'et på den bruger man ønsker at hente kurser for.
      * @return De givne kurser i form af en JSON String.
      */
-/*
     @OPTIONS
     @Path("/course/{userId}")
     public Response getCourses() {
@@ -64,8 +62,8 @@ public class UserEndpoint {
                 .header("Access-Control-Allow-Origin", "*")
                 .header("Access-Control-Allow-Headers", "Content-Type")
                 .build();
+
     }
-*/
 
     @GET
     @Path("/course/{userId}")
@@ -83,7 +81,7 @@ public class UserEndpoint {
     }
 
     @OPTIONS
-    @Path("/course/{userId}")
+    @Path("/review/{lectureId}")
     public Response getReviews() {
         return Response
                 .status(200)
@@ -93,9 +91,7 @@ public class UserEndpoint {
 
     }
 
-
     @GET
-    @Consumes("applications/json")
     @Path("/review/{lectureId}")
     public Response getReviews(@PathParam("lectureId") int lectureId) {
         Gson gson = new Gson();
@@ -151,13 +147,15 @@ public class UserEndpoint {
         //return Response.status(status).entity(new Gson().toJson("{\"message\": \"" + message + "\"}")).build();
     }
 
+
     protected Response successResponse(int status, Object data) {
         Gson gson = new Gson();
 
+        //Pt. udkommenteret for testing.
+        //return Response.status(status).entity(gson.toJson(Digester.encrypt(gson.toJson(data)))).build();
+
         //Adding response headers to enable CORS in the Chrome browser
         return Response.status(status).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "Content-Type").entity(gson.toJson(data)).build();
-
-
     }
                // return Response.status(status).entity(gson.toJson(data)).build();
 

@@ -15,8 +15,17 @@ import javax.ws.rs.core.Response;
 @Path("/api/student")
 public class StudentEndpoint extends UserEndpoint {
 
+    @OPTIONS
+    @Path("/review")
+    public Response optionsReview() {
+        return Response
+                .status(200)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .build();
+    }
+
     @POST
-    @Consumes("application/json")
     @Path("/review")
     public Response addReview(String json) {
 
@@ -27,7 +36,8 @@ public class StudentEndpoint extends UserEndpoint {
         boolean isAdded = studentCtrl.addReview(review);
 
         if (isAdded) {
-            String toJson = gson.toJson(Digester.encrypt(gson.toJson(isAdded)));
+            //String toJson = gson.toJson(Digester.encrypt(gson.toJson(isAdded)));
+            String toJson = gson.toJson((gson.toJson(isAdded)));
 
             return successResponse(200, toJson);
 
@@ -37,8 +47,7 @@ public class StudentEndpoint extends UserEndpoint {
     }
 
     @DELETE
-    @Consumes("application/json")
-    @Path("/review/")
+    @Path("/review")
     public Response deleteReview(String data) {
         Gson gson = new Gson();
 
@@ -55,4 +64,26 @@ public class StudentEndpoint extends UserEndpoint {
             return errorResponse(404, "Failed. Couldn't delete the chosen review.");
         }
     }
+
+    protected Response errorResponse(int status, String message) {
+
+        return Response.status(status).entity(new Gson().toJson(Digester.encrypt("{\"message\": \"" + message + "\"}"))).build();
+        //return Response.status(status).entity(new Gson().toJson("{\"message\": \"" + message + "\"}")).build();
+    }
+
+
+    protected Response successResponse(int status, Object data) {
+        Gson gson = new Gson();
+
+        //Pt. udkommenteret for testing.
+        //return Response.status(status).entity(gson.toJson(Digester.encrypt(gson.toJson(data)))).build();
+
+        //Adding response headers to enable CORS in the Chrome browser
+        return Response.status(status).header("Access-Control-Allow-Origin", "*").header("Access-Control-Allow-Headers", "Content-Type").entity(gson.toJson(data)).build();
+    }
+    // return Response.status(status).entity(gson.toJson(data)).build();
+
+    //return Response.status(status).entity(gson.toJson(Digester.encrypt(gson.toJson(data)))).build();
 }
+
+
