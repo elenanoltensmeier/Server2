@@ -1,5 +1,6 @@
 package logic;
 
+import security.Digester;
 import shared.LectureDTO;
 import shared.ReviewDTO;
 
@@ -28,11 +29,12 @@ public class UserController {
     public UserDTO login(String cbs_email, String password) {
 
         UserDTO user = new UserDTO();
+        String securedPw = Digester.hashWithSalt(password);
 
         try {
             Map<String, String> params = new HashMap();
             params.put("cbs_mail", String.valueOf(cbs_email));
-            params.put("password", String.valueOf(password));
+            params.put("password", String.valueOf(securedPw)); //password
 
             String[] attributes = {"id, type"};
             ResultSet rs = DBWrapper.getRecords("user", attributes, params, null, 0);

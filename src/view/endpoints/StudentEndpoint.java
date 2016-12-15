@@ -36,8 +36,8 @@ public class StudentEndpoint extends UserEndpoint {
         boolean isAdded = studentCtrl.addReview(review);
 
         if (isAdded) {
-            //String toJson = gson.toJson(Digester.encrypt(gson.toJson(isAdded)));
-            String toJson = gson.toJson((gson.toJson(isAdded)));
+            String toJson = gson.toJson(Digester.encrypt(gson.toJson(isAdded)));
+            //  String toJson = gson.toJson((gson.toJson(isAdded)));
 
             return successResponse(200, toJson);
 
@@ -46,8 +46,19 @@ public class StudentEndpoint extends UserEndpoint {
         }
     }
 
+    @OPTIONS
+    @Path("/review/delete")
+    public Response deleteReview() {
+        return Response
+                .status(200)
+                .header("Access-Control-Allow-Origin", "*")
+                .header("Access-Control-Allow-Headers", "Content-Type")
+                .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+                .build();
+    }
+
     @DELETE
-    @Path("/review")
+    @Path("/review/delete")
     public Response deleteReview(String data) {
         Gson gson = new Gson();
 
@@ -64,8 +75,12 @@ public class StudentEndpoint extends UserEndpoint {
             return errorResponse(404, "Failed. Couldn't delete the chosen review.");
         }
     }
+}
 
-    protected Response errorResponse(int status, String message) {
+
+
+
+   /* protected Response errorResponse(int status, String message) {
 
         return Response.status(status).entity(new Gson().toJson(Digester.encrypt("{\"message\": \"" + message + "\"}"))).build();
         //return Response.status(status).entity(new Gson().toJson("{\"message\": \"" + message + "\"}")).build();
@@ -87,3 +102,4 @@ public class StudentEndpoint extends UserEndpoint {
 }
 
 
+*/

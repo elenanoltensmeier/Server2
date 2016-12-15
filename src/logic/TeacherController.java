@@ -48,7 +48,7 @@ public class TeacherController extends UserController {
      * @param courseId id'et på det kursus man ønsker samlet antal deltagere for.
      * @return det samlede antal der er tilmeldt kurset.
      */
-    //TODO  returnerer denne her også læreren selv som en del af samlet antal tilmeldte?
+    //TODO ...fuck... returnerer denne her også læreren selv som en del af samlet antal tilmeldte?
     public int getCourseParticipants(int courseId) {
 
         //Forbered MySQL statement
@@ -159,5 +159,27 @@ public class TeacherController extends UserController {
 
         return average;
 
+    }
+
+    public boolean softDeleteReview(int reviewId) {
+        boolean isSoftDeleted = true;
+
+        try {
+            Map<String, String> isDeleted = new HashMap();
+
+            isDeleted.put("is_deleted", "1");
+
+            Map<String, String> params = new HashMap();
+            params.put("id", String.valueOf(reviewId));
+
+
+            DBWrapper.updateRecords("review", isDeleted, params);
+            return isSoftDeleted;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            isSoftDeleted = false;
+        }
+        return isSoftDeleted;
     }
 }
